@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Маршруты в React</title>
+</head>
+<body>
+    <div id="app"></div>
+          
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const Router = ReactRouterDOM.BrowserRouter;
+        const Route = ReactRouterDOM.Route;
+        const Routes = ReactRouterDOM.Routes;
+        const useParams = ReactRouterDOM.useParams;
+        const NavLink = ReactRouterDOM.NavLink;
+        const Outlet = ReactRouterDOM.Outlet;
+
+        const phones =[
+                    {id: 1, name: "Apple iPhone 12 Pro"}, 
+                    {id: 2, name: "Google Pixel 5"}, 
+                    {id: 3, name: "Huawei P40 Pro"} 
+                ];
+            
+        function ProductsList() {
+            return <div>
+                    <h2>Список товаров</h2>
+                    <ul>
+                        {
+                            phones.map(function(item) {
+                                return <li key={item.id}>
+                                        <NavLink to={`/products/${item.id}`}>{item.name}</NavLink>
+                                    </li>
+                            })
+                        }
+                    </ul>
+                </div>;
+        }
+        function Product() {
+            const params = useParams();
+            const prodId = params.id;
+            const phone = phones.find(p => p.id == prodId);
+            if (phone === undefined)
+                return <h2>Товар не найден</h2>;
+            else
+                return <h2>Товар {phone.name}</h2>;
+        }
+        function Products() {
+            return <div>
+                    <h1>Товары</h1>
+                    <Outlet />
+                </div>;
+        }
+        ReactDOM.createRoot(
+            document.querySelector('#app')
+        )
+        .render(
+            <Router>
+                <div>
+                    <Routes>
+                        <Route path="/" element={<h2>Главная</h2>} />
+                        <Route path="/products" element={<Products />}>
+                            <Route index element={<ProductsList />} />
+                            <Route path=":id" element={<Product />} />
+                        </Route>
+                        <Route path="*" element={<h2>Ресурс не найден</h2>} />
+               </Routes>
+            </div>
+        </Router>
+        )
+    </script>
+</body>
+</html>

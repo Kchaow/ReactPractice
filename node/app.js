@@ -6,6 +6,14 @@ app.use(
     express.static(__dirname + '/static')
 );
 
+app.get("/", function(request, response) {
+    response.sendFile(path.join(__dirname+'/examples/routing.html'));
+});
+
+app.get("/about", function(request, response) {
+    response.sendFile(path.join(__dirname+'/examples/routing.html'));
+});
+
 app.get("/hello", function(request, response) {
     response.sendFile(path.join(__dirname+'/examples/hello.html'));
 });
@@ -49,5 +57,11 @@ app.get('/validation', function(request, response) {
 app.get('/validation-ref', function(request, response) {
     response.sendFile(path.join(`${__dirname}/examples/validationRef.html`));
 });
+
+app.get('/hook', function(request, response) {
+    response.sendFile(path.join(`${__dirname}/examples/hook.html`));
+});
+
+
 
 app.listen(3000);
